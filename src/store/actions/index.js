@@ -1,0 +1,1 @@
+export { SetPokemons, GetPokemons, FilterPokemons } from './pokemons';
