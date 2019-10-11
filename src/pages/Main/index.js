@@ -90,18 +90,6 @@ class Main extends Component {
 
 
 const styles = StyleSheet.create({
-	names: {
-		color: "#FF0000",
-		backgroundColor: '#ccf',
-		// padding: '10px',
-		// color: '#ff0',
-		// display: 'flex',
-		// flexDirection: "row",
-		// justifyContent: 'space-between',
-		// alignItems: 'center',
-		// flexWrap: "wrap"
-	},
-
 	title: {
 		fontSize: 20,
 		textAlign: "center",
