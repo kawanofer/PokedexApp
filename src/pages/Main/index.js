@@ -9,7 +9,7 @@ import {
 	FlatList, SafeAreaView, ScrollView, StyleSheet, Text, View, Image, Dimensions, ImageBackground, StatusBar,
 } from 'react-native';
 
-//import { SearchBar } from "react-native-elements";
+import { SearchBar, Divider } from 'react-native-elements';
 
 class Main extends Component {
 	state = {
@@ -29,8 +29,11 @@ class Main extends Component {
 			this.setState({ displayedPokemonsData: this.props.pokemons });
 		}
 
-		if (prevState.displayedPokemonsData !== this.state.displayedPokemonsData) {
-			console.log("#> ", this.state.displayedPokemonsData);
+		if (prevState.search !== this.state.search) {
+			const displayedPokemons = this.state.displayedPokemonsData.filter(pokemon => {
+				return pokemon.name.toLowerCase().includes(this.state.search.toLowerCase())
+			});
+			this.setState({ displayedPokemonsData: displayedPokemons });
 		}
 	}
 
@@ -38,8 +41,18 @@ class Main extends Component {
 		this.setState({ search });
 	};
 
+	clearSearch = () => {
+		this.setState({ search: "" });
+		this.setState({ displayedPokemonsData: this.props.pokemons });
+	};
+
 	renderHeader = () => {
-		return <SearchBar placeholder="Type Here..." lightTheme round />;
+		return <SearchBar
+			onChangeText={_.throttle(this.updateSearch, 1000)}
+			onClear={this.clearSearch}
+			value={this.state.search}
+			placeholder="Search..."
+			lightTheme />;
 	};
 
 	render() {
@@ -47,31 +60,28 @@ class Main extends Component {
 		return (
 			<SafeAreaView>
 				<Text style={styles.title}>POKEDEX</Text>
-				{/* <SearchBar
-					placeholder="Type Here..."
-					// onChangeText={this.updateSearch}
-					value={search}
-				/> */}
+
 				{displayedPokemonsData &&
-					<>
-						<FlatList
-							data={displayedPokemonsData}
-							keyExtractor={item => item.id}
-							numColumns={2}
-							// ListHeaderComponent={this.renderHeader}
-							renderItem={({ item }) => {
-								return (
-									<View style={styles.item}>
-										<Text style={styles.number}>{item.id}</Text>
-										<View style={styles.imageContainer}>
-											<Image style={styles.image} source={{ uri: item.image }} />
-										</View>
-										<Text style={styles.text}>{_.capitalize(item.name)}</Text>
+
+					<FlatList
+						data={displayedPokemonsData}
+						keyExtractor={item => item.id}
+						numColumns={2}
+						platform="default"
+						ListHeaderComponent={this.renderHeader}
+						renderItem={({ item }) => {
+							return (
+								<View style={styles.item}>
+									<Text style={styles.number}>{item.id}</Text>
+									<View style={styles.imageContainer}>
+										<Image style={styles.image} source={{ uri: item.image }} />
 									</View>
-								);
-							}}
-						/>
-					</>
+									<Text style={styles.text}>{_.capitalize(item.name)}</Text>
+								</View>
+							);
+						}}
+					/>
+
 				}
 			</SafeAreaView>
 		)

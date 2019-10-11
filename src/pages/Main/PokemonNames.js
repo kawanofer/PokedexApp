@@ -15,8 +15,7 @@ class PokemonNames extends Component {
     }
 
     componentDidMount() {
-        debugger;
-        console.log(this.state.pokemons);
+        //console.log(this.state.pokemons);
 
     }
 
